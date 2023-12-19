@@ -5,41 +5,45 @@ BOARD_WIDTH = 8
 BOARD_HEIGHT = 8
 
 class Piece:
-    def __init__(self, colour):
+    def __init__(self, colour, name):
         self.__colour = colour
+        self.__name = name
+
+    def get_name(self):
+        return self.__name
 
 class Pawn(Piece):
-    def __init__(self):
-        super().__init__(Piece)
+    def __init__(self, colour):
+        super().__init__(colour, "p")
 
 class Knight(Piece):
-    def __init__(self):
-        super().__init__(Piece)
+    def __init__(self, colour):
+        super().__init__(colour, "n")
 
 class Bishop(Piece):
-    def __init__(self):
-        super().__init__(Piece)
+    def __init__(self, colour):
+        super().__init__(colour, "b")
 
 class Rook(Piece):
-    def __init__(self):
-        super().__init__(Piece)
+    def __init__(self, colour):
+        super().__init__(colour, "r")
 
 class Queen(Piece):
-    def __init__(self):
-        super().__init__(Piece)
-        self.__rook = Rook()
-        self.__bishop = Bishop()
+    def __init__(self, colour):
+        super().__init__(colour, "q")
+        self.__rook = Rook(colour)
+        self.__bishop = Bishop(colour)
 
 class King(Piece):
-    def __init__(self):
-        super().__init__(Piece)
+    def __init__(self, colour):
+        super().__init__(colour, "k")
 
 class Player:
     def __init__(self):
-        self.__pieces = {}
-        self.__rooks = {}
-        self.__bishops = {}
-        self.__queens = {}
+        self.__pieces = set()
+        self.__rooks = set()
+        self.__bishops = set()
+        self.__queens = set()
 
     def add_piece(self, coord):
         self.__pieces.add(coord)
@@ -67,10 +71,10 @@ class Player:
 
 class Board:
     def __init__(self):
-        self.__test_pieces()
         self.__white = Player()
         self.__black = Player()
         self.__turns = 1
+        self.__test_pieces()
 
     def place_piece(self, colour):
         return
@@ -103,6 +107,7 @@ class Board:
                         self.__white.add_piece((y,x))
                     else:
                         self.__black.add_piece((y,x))
+            self.__pieces.append(row)
 
     def __valid_move(self, start, end):
         return
@@ -123,4 +128,20 @@ class Board:
         self.__next_valid_moves()
         self.__turns += 1
         return True
+
+    def print_board(self):
+        print ("-------------------")
+        for y in range(BOARD_HEIGHT):
+            row = "|"
+            for x in range(BOARD_WIDTH):
+                if self.__pieces[y][x]:
+                    row = row + " " + self.__pieces[y][x].get_name()
+                else:
+                    row = row + "  "
+            row = row + " |"
+            print (row)
+        print ("-------------------")
+
+board = Board()
+board.print_board()
 

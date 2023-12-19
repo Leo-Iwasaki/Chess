@@ -7,12 +7,10 @@ BOARD_HEIGHT = 8
 class Piece:
     def __init__(self, colour, name):
         self.__colour = colour
-<<<<<<< HEAD
         self.__name = name
 
     def get_name(self):
         return self.__name
-=======
         self.__next_valid_moves = []
 
     def is_valid_move(self, colour, end):
@@ -21,7 +19,6 @@ class Piece:
         if end in __next_valid_moves:
             return False
         return True
->>>>>>> 4129e25ba2f2b016ca823a5d5932afaa39502b91
 
 class Pawn(Piece):
     def __init__(self, colour):
@@ -72,7 +69,7 @@ class Player:
         self.__pieces.remove(coord)
 
     def remove_bishop(self, coord):
-        if coord in self.__bishops
+        if coord in self.__bishops:
             self.__bishops.remove(coord)
 
     def remove_rook(self, coord):
@@ -152,7 +149,6 @@ class Board:
         self.__next_valid_moves()
         self.__turns += 1
         return True
-<<<<<<< HEAD
 
     def print_board(self):
         print ("-------------------")
@@ -169,6 +165,3 @@ class Board:
 
 board = Board()
 board.print_board()
-
-=======
->>>>>>> 4129e25ba2f2b016ca823a5d5932afaa39502b91

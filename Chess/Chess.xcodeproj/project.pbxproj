@@ -14,6 +14,7 @@
 		534C82842B32093B0029639D /* ChessTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C82832B32093B0029639D /* ChessTests.swift */; };
 		534C828E2B32093B0029639D /* ChessUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C828D2B32093B0029639D /* ChessUITests.swift */; };
 		534C82902B32093B0029639D /* ChessUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C828F2B32093B0029639D /* ChessUITestsLaunchTests.swift */; };
+		534C829D2B321D050029639D /* ChessboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 534C829C2B321D050029639D /* ChessboardView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		534C82892B32093B0029639D /* ChessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ChessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		534C828D2B32093B0029639D /* ChessUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessUITests.swift; sourceTree = "<group>"; };
 		534C828F2B32093B0029639D /* ChessUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		534C829C2B321D050029639D /* ChessboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChessboardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,6 +98,7 @@
 			children = (
 				534C82722B32093A0029639D /* ChessApp.swift */,
 				534C82742B32093A0029639D /* ContentView.swift */,
+				534C829C2B321D050029639D /* ChessboardView.swift */,
 				534C82762B32093B0029639D /* Assets.xcassets */,
 				534C82782B32093B0029639D /* Preview Content */,
 			);
@@ -258,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				534C82752B32093A0029639D /* ContentView.swift in Sources */,
+				534C829D2B321D050029639D /* ChessboardView.swift in Sources */,
 				534C82732B32093A0029639D /* ChessApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

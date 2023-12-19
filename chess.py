@@ -1,11 +1,27 @@
 class Piece:
     def __init__(self):
+        self.__next_valid_moves = []
+
+    # def __is_valid_colour(self, colour):
+    #     if colour != self.colour:
+    #         return False
+    #     return True
+
+    # def __is_valid_move(self, end):
+    #     if end in __next_valid_moves:
+    #         return False
+    #     return True
+
+    def valid_move(self, colour, end):
+        if colour != self.colour:
+            return False
+        if end in __next_valid_moves:
+            return False
+        return True
 
 class Pawn(piece):
     def __init__(self):
         super().__init__(piece)
-
-    def valid_move(self, start_pos, end_pos, tiles):
 
 class Knight(piece):
     def __init__(self):
@@ -46,19 +62,24 @@ class Board:
     def __create_pieces(self):
         self.__tiles = [[],[]]
 
-    def __valid_move(self, start, end):
-
-    def __move(self, start, end):
+    def __move(self, colour, start, end):
+        mine = self.__white if colour else self.__while
+        mine.remove(start)
+        mine.add
+        self.__tiles[start[0]][start[1]] = None
+        target = self.__tiles[end[0]][end[1]]
+        if target:
+            assert self.__tiles.colour != colour
+            opponent = self.__black if colour else self.__white
+            opponent.remove_piece(end)
 
     def __next_valid_moves(self):
 
-    def __find_check(self):
-
-    def make_move(self, start, end):
-        if not self.__valid_move(start, end):
+    def make_move(self, colour, start, end):
+        if not self.__tiles(start):
             return False
-        self.__move(start, end)
+        if not self.__tiles[start[0]][start[1]].valid_move(self, end):
+            return False
+        self.__move(colour, start, end)
         self.__next_valid_moves()
         self.__turns += 1
-
-

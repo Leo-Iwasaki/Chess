@@ -14,7 +14,7 @@ class Piece:
         self.__next_valid_moves = []
 
     def is_valid_move(self, colour, end):
-        if colour != self.colour:
+        if colour != self.__colour:
             return False
         if end in __next_valid_moves:
             return False
@@ -48,13 +48,13 @@ class King(Piece):
 
 class Player:
     def __init__(self):
-        self.__pieces = set()
+        self.pieces = set()
         self.__rooks = set()
         self.__bishops = set()
         self.__queens = set()
 
     def add_piece(self, coord):
-        self.__pieces.add(coord)
+        self.pieces.add(coord)
 
     def add_bishop(self, coord):
         self.__bishops.add(coord)
@@ -66,7 +66,7 @@ class Player:
         self.__queens.add(coord)
         
     def remove_piece(self, coord):
-        self.__pieces.remove(coord)
+        self.pieces.remove(coord)
 
     def remove_bishop(self, coord):
         if coord in self.__bishops:
@@ -124,7 +124,8 @@ class Board:
         mine = self.__white if colour else self.__while
         mine.remove(start)
         mine.add
-        self.__tiles[start[0]][start[1]] = None
+        piece = self.__pieces[start[0]][start[1]]
+        self.__pieces[start[0]][start[1]] = None
         target = self.__tiles[end[0]][end[1]]
         if target:
             assert self.__tiles.colour != colour
@@ -136,17 +137,29 @@ class Board:
                 opponent.remove_Rook(end)
             elif isinstance(target, Queen):
                 opponent.remove_queen(end)
+        self.__pieces[end[0]][end[1]] = piece
 
-    def __next_valid_moves(self):
+    def __potential_check(self, piece):
         return
+        # if isinstance(piece, Bishop):
+        # elif isinstance(piece, Rook):
+        # elif isinstance(piece, Queen):
+
+    def next_valid_moves(self, colour):
+        return True
+        # for piece in (self.__white if colour else self.__white).pieces:
+        #     if :
+        #         return True
 
     def make_move(self, colour, start, end):
-        if not self.__tiles(start):
+        target = self.__pieces[start[0]][start[1]]
+        if not target:
             return False
-        if not self.__tiles[start[0]][start[1]].is_valid_move(self, end):
+        if not target.is_valid_move(self, end):
             return False
         self.__move(colour, start, end)
-        self.__next_valid_moves()
+        self.__potential_check(self.__pieces[end[0]][end[1]])
+        self.next_valid_moves(not colour)
         self.__turns += 1
         return True
 
@@ -164,4 +177,7 @@ class Board:
         print ("-------------------")
 
 board = Board()
+board.print_board()
+board.next_valid_moves(True)
+board.make_move(True, (1, 0), (2, 0))
 board.print_board()

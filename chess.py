@@ -7,31 +7,18 @@ BOARD_HEIGHT = 8
 class Piece:
     def __init__(self, colour, name):
         self.__colour = colour
-<<<<<<< HEAD
         self.__name = name
 
     def get_name(self):
         return self.__name
-=======
         self.__next_valid_moves = []
 
-    # def __is_valid_colour(self, colour):
-    #     if colour != self.colour:
-    #         return False
-    #     return True
-
-    # def __is_valid_move(self, end):
-    #     if end in __next_valid_moves:
-    #         return False
-    #     return True
-
-    def valid_move(self, colour, end):
+    def is_valid_move(self, colour, end):
         if colour != self.colour:
             return False
         if end in __next_valid_moves:
             return False
         return True
->>>>>>> 4129e25ba2f2b016ca823a5d5932afaa39502b91
 
 class Pawn(Piece):
     def __init__(self, colour):
@@ -69,11 +56,11 @@ class Player:
     def add_piece(self, coord):
         self.__pieces.add(coord)
 
-    def add_rook(self, coord):
-        self.__rooks.add(coord)
-
     def add_bishop(self, coord):
         self.__bishops.add(coord)
+
+    def add_rook(self, coord):
+        self.__rooks.add(coord)
 
     def add_queen(self, coord):
         self.__queens.add(coord)
@@ -81,14 +68,17 @@ class Player:
     def remove_piece(self, coord):
         self.__pieces.remove(coord)
 
-    def remove_rook(self, coord):
-        self.__rooks.remove(coord)
-
     def remove_bishop(self, coord):
-        self.__bishops.remove(coord)
+        if coord in self.__bishops:
+            self.__bishops.remove(coord)
+
+    def remove_rook(self, coord):
+        if coord in self.__rooks:
+            self.__rooks.remove(coord)
 
     def remove_queen(self, coord):
-        self.__queens.remove(coord)
+        if coord in self.__queens:
+            self.__queens.remove(coord)
 
 class Board:
     def __init__(self):
@@ -111,12 +101,12 @@ class Board:
                 if y == 1 or y == column_end - 1:
                     row.append(Pawn(colour))
                 elif y == 0 or y == column_end:
-                    if x == 0 or x == row_end:
-                        row.append(Rook(colour))
-                    elif x == 1 or x == row_end - 1:
+                    if x == 1 or x == row_end - 1:
                         row.append(Knight(colour))
                     elif x == 2 or x == row_end - 2:
                         row.append(Bishop(colour))
+                    elif x == 0 or x == row_end:
+                        row.append(Rook(colour))
                     elif (y == 0 and x == 3) or (y == column_end and x == row_end - 3):
                         row.append(Queen(colour))
                     else:
@@ -140,6 +130,12 @@ class Board:
             assert self.__tiles.colour != colour
             opponent = self.__black if colour else self.__white
             opponent.remove_piece(end)
+            if isinstance(target, Bishop):
+                opponent.remove_bishop(end)
+            elif isinstance(target, Rook):
+                opponent.remove_Rook(end)
+            elif isinstance(target, Queen):
+                opponent.remove_queen(end)
 
     def __next_valid_moves(self):
         return
@@ -147,13 +143,12 @@ class Board:
     def make_move(self, colour, start, end):
         if not self.__tiles(start):
             return False
-        if not self.__tiles[start[0]][start[1]].valid_move(self, end):
+        if not self.__tiles[start[0]][start[1]].is_valid_move(self, end):
             return False
         self.__move(colour, start, end)
         self.__next_valid_moves()
         self.__turns += 1
         return True
-<<<<<<< HEAD
 
     def print_board(self):
         print ("-------------------")
@@ -170,6 +165,3 @@ class Board:
 
 board = Board()
 board.print_board()
-
-=======
->>>>>>> 4129e25ba2f2b016ca823a5d5932afaa39502b91

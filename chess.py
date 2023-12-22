@@ -139,11 +139,27 @@ class Board:
                 opponent.remove_queen(end)
         self.__pieces[end[0]][end[1]] = piece
 
-    def __potential_check(self, piece):
-        return
-        # if isinstance(piece, Bishop):
-        # elif isinstance(piece, Rook):
-        # elif isinstance(piece, Queen):
+    def __potential_check_bishop(self, end, piece):
+        for y in range(BOARD_HEIGHT):
+            x = [y - end[0] + end[1]]
+            if x >= 0:
+                target = self.__pieces[y][y - end]
+                if target and ()
+            if isinstance(self.__pieces[y][x], King):
+                return True
+        return False
+
+    def __potential_check_rook(self, end, piece):
+        return False
+
+    def __potential_check(self, end):
+        piece = self.__pieces[end[0]][end[1]]
+        if isinstance(piece, Bishop) and __potential_check_bishop(self, end, piece):
+            add_bishop(self, end)
+        elif isinstance(piece, Rook) and __potential_check_rook(self, end, piece):
+            add_rook(self, end)
+        elif isinstance(piece, Queen) and (__potential_check_bishop(self, end, piece) or __potential_check_rook(self, end, piece)):
+            add_queen(self, end)
 
     def next_valid_moves(self, colour):
         return True
@@ -158,7 +174,7 @@ class Board:
         if not target.is_valid_move(self, end):
             return False
         self.__move(colour, start, end)
-        self.__potential_check(self.__pieces[end[0]][end[1]])
+        self.__potential_check(end)
         self.next_valid_moves(not colour)
         self.__turns += 1
         return True

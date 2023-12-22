@@ -8,6 +8,9 @@ class Player:
         
     def get_pieces(self):
         return self.__pieces
+        
+    def get_pinnable_pieces(self):
+        return self.__rooks + self.__bishops + self.__queens
 
     def add_piece(self, coord):
         self.__pieces.add(coord)

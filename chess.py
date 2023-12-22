@@ -1,6 +1,8 @@
 from pieces import *
 from players import *
 
+import copy
+
 NUM_PLAYERS = 2
 WHITE = True
 BLACK = False
@@ -76,9 +78,12 @@ class Board:
 #             add_queen(self, end)
 
 #-------------------------------------------------------------------------------
-
-    def __get_piece(self, tile):
-        return self.__pieces[tile[0]][tile[1]]
+    def __get_piece(self, tile, pieces):
+        return pieces[tile[0]][tile[1]]
+    
+    def __set_tile(self, tile, pieces, piece):
+        pieces[tile[0]][tile[1]] = piece
+        return pieces
         
     def __get_player(self, colour):
         return self.__white if colour else self.__black
@@ -104,6 +109,35 @@ class Board:
     # A list of tuples (pinning, pinned).
     def __pinning_and_pinned(self, colour):
         return []
+
+    def __checking_pieces(self, colour):
+        pieces = self.__pieces
+        checking_pieces = []
+        for tile in self.__get_player(colour).get_pinnable_pieces():
+            piece = self.__get_piece(tile, pieces)
+            for target_tile in piece.get_valid_moves():
+                target_piece = self.__get_piece(target_tile, pieces)
+                if target_piece and target_piece.get_name() == KING:
+                    checking_pieces.append(piece)
+        return checking_pieces
+    
+    def __pinning_and_pinned(self, colour):
+        checking_pieces = []
+        for tile in self.__get_player(colour).get_pinnable_pieces():
+            pieces = self.__pieces.copy()
+            piece = self.__get_piece(tile, pieces)
+            for target_tile in piece.get_valid_moves():
+                target_piece = self.__get_piece(target_tile, pieces)
+                if target_piece and target_piece.get_name() != KING:  
+                    pieces = self.__set_tile(tile, pieces, None)
+                    
+            piece_clone = copy.deepcopy(piece)
+            piece_clone.valid_moves(pieces, [], [])
+            for target_tile in piece_clone.get_valid_moves():
+                target_piece = self.__get_piece(target_tile, pieces)
+                if target_piece and target_piece.get_name() == KING:
+                    checking_pieces.append(piece)
+        return checking_pieces
 
     # Calculates the next valid moves for opponent.
     def __next_valid_moves(self, colour, checking_pieces, pinning_and_pinned):
@@ -135,7 +169,7 @@ class Board:
 #   update next valid moves of the opponent
 
     def make_move(self, colour, start, end):
-        piece = self.__get_piece(start)
+        piece = self.__get_piece(start, self.__pieces)
         if not piece:
             return False
         moves = piece.move(colour, end)
@@ -149,17 +183,17 @@ class Board:
         return True
 
     def print_board(self):
-        print ("-------------------")
+        print ("-" * (BOARD_WIDTH * 4 + 1))
         for y in range(BOARD_HEIGHT):
             row = "|"
             for x in range(BOARD_WIDTH):
                 if self.__pieces[y][x]:
-                    row = row + " " + self.__pieces[y][x].get_name()
+                    row = row  + " " + self.__pieces[y][x].get_name() + " |"
                 else:
-                    row = row + "  "
-            row = row + " |"
+                    row = row + "   |"
             print (row)
-        print ("-------------------")
+            print ("-" * (BOARD_WIDTH * 4 + 1))
+        print("Turn " + str(self.__turns), "\n")
 
 board = Board()
 board.print_board()

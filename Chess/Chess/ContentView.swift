@@ -9,28 +9,47 @@ import SwiftUI
 
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
+let rows = 8
+let columns = 8
 
 enum ChessSide {
     case white, black
 }
 
 struct ContentView: View {
+    @State private var scrollViewTexts: [String] = []
+    @StateObject var viewModel = ChessboardViewModel()
     
     var body: some View {
+        
         NavigationView {
             VStack {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack {
-                        Text("aaa")
-                            .foregroundColor(Color("historybartxt"))
+                ScrollViewReader { scrollViewProxy in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack {
+                            ForEach(scrollViewTexts.indices, id: \.self) { index in
+                                Text(scrollViewTexts[index])
+                                    .foregroundColor(Color("historybartxt"))
+                                    .padding(.horizontal, 8)
+                                    .id(index)
+                            }
+                        }
+                        .onChange(of: scrollViewTexts) { _ in
+                            if let last = scrollViewTexts.indices.last {
+                                scrollViewProxy.scrollTo(last, anchor: .trailing)
+                            }
+                        }
                     }
+                    .background(Color("historybar"))
+                    .frame(height: screenHeight * 0.02)
                 }
-                .background(Color("historybar"))
-                .frame(height: screenHeight * 0.02)
                 
                 Spacer()
                 
-                ChessboardView(screenWidth: screenWidth, side: .white)
+                ChessboardView(side: .black, viewModel: viewModel) { piece in
+                    let index = ChessboardHelper.indexForButton(piece: piece)
+                    self.scrollViewTexts.append("\(ChessboardHelper.columnLetter(from: index.row))\(index.column + 1)")
+                }
                 
                 Spacer()
             }
@@ -40,6 +59,7 @@ struct ContentView: View {
         }
         .tabBarView()
     }
+    
 }
 
 extension View {

@@ -17,8 +17,8 @@ enum ChessSide {
 }
 
 struct ContentView: View {
-    @State private var scrollViewTexts: [String] = []
     @StateObject var viewModel = ChessboardViewModel()
+    @StateObject var scrollViewTexts = MoveText()
     
     var body: some View {
         
@@ -27,29 +27,28 @@ struct ContentView: View {
                 ScrollViewReader { scrollViewProxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack {
-                            ForEach(scrollViewTexts.indices, id: \.self) { index in
-                                Text(scrollViewTexts[index])
+                            ForEach(Array(scrollViewTexts.texts.enumerated()), id: \.element) { index, text in
+                                Text(text)
                                     .foregroundColor(Color("historybartxt"))
                                     .padding(.horizontal, 8)
                                     .id(index)
                             }
                         }
-                        .onChange(of: scrollViewTexts) { _ in
-                            if let last = scrollViewTexts.indices.last {
+                        .onChange(of: scrollViewTexts.texts) { _ in
+                            if let last = scrollViewTexts.texts.indices.last {
                                 scrollViewProxy.scrollTo(last, anchor: .trailing)
                             }
                         }
                     }
+                    .environmentObject(scrollViewTexts)
                     .background(Color("historybar"))
                     .frame(height: screenHeight * 0.02)
                 }
                 
                 Spacer()
                 
-                ChessboardView(side: .black, viewModel: viewModel) { piece in
-                    let index = ChessboardHelper.indexForButton(piece: piece)
-                    self.scrollViewTexts.append("\(ChessboardHelper.columnLetter(from: index.row))\(index.column + 1)")
-                }
+                ChessboardView(side: .black, viewModel: viewModel)
+                    .environmentObject(scrollViewTexts)
                 
                 Spacer()
             }

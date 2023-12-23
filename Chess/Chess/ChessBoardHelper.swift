@@ -13,7 +13,7 @@ struct ChessboardHelper {
         let yPosition = screenWidth * 0.08 + cellHeight * CGFloat(row) + cellHeight / 2
         return CGPoint(x: xPosition, y: yPosition)
     }
-    
+
     static func columnLetter(from index: Int) -> String {
         let letters = ["A", "B", "C", "D", "E", "F", "G", "H"]
         return letters[index]

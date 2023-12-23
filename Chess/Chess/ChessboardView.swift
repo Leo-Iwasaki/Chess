@@ -9,12 +9,11 @@ import SwiftUI
 
 struct ChessboardView: View {
     let side: ChessSide
-    var onButtonTap: (ChessPiece) -> Void
     @ObservedObject var viewModel: ChessboardViewModel
+    @EnvironmentObject var scrollViewTexts: MoveText
     
-    init(side: ChessSide, viewModel: ChessboardViewModel, onButtonTap: @escaping (ChessPiece) -> Void) {
+    init(side: ChessSide, viewModel: ChessboardViewModel) {
         self.side = side
-        self.onButtonTap = onButtonTap
         self.viewModel = viewModel
     }
     
@@ -27,7 +26,8 @@ struct ChessboardView: View {
                 
             ForEach(0..<8, id: \.self) { row in
                 ForEach(0..<8, id: \.self) { column in
-                    PieceView(side: .white, row: row, column: column, viewModel: viewModel, onButtonTap: onButtonTap)
+                    PieceView(side: .white, row: row, column: column, viewModel: viewModel)
+                        .environmentObject(scrollViewTexts)
                 }
             }
                 

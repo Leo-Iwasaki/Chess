@@ -22,12 +22,14 @@ struct ChessPiece: Identifiable {
     }
 }
 
-struct TrailPoint: Identifiable {
-    let id: UUID
-    let point: CGPoint
+class MoveText: ObservableObject, Equatable, Hashable {
+    @Published var texts: [String] = []
     
-    init(point: CGPoint) {
-        self.id = UUID()
-        self.point = point
+    static func == (lhs: MoveText, rhs: MoveText) -> Bool {
+        lhs.texts == rhs.texts
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(texts)
     }
 }

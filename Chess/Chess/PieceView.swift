@@ -11,25 +11,24 @@ struct PieceView: View {
     @GestureState private var dragOffset = CGSize.zero // Tracks the drag state
     @ObservedObject var viewModel: ChessboardViewModel
     @State private var position: CGPoint
+    @EnvironmentObject var moveTexts: MoveText
 
     var piece: ChessPiece
-    var onButtonTap: (ChessPiece) -> Void
     let cellWidth = (screenWidth * 0.78) / CGFloat(columns)
     let cellHeight = (screenWidth * 0.75) / CGFloat(columns)
     
-    init(side: ChessSide, row: Int, column: Int, viewModel: ChessboardViewModel, onButtonTap: @escaping (ChessPiece) -> Void) {
+    init(side: ChessSide, row: Int, column: Int, viewModel: ChessboardViewModel) {
         let initialPosition = ChessboardHelper.positionForRowAndColumn(row: row, column: column, cellWidth: cellWidth, cellHeight: cellHeight)
         self._position = State(initialValue: initialPosition)
         self.viewModel = viewModel
         self.piece = ChessPiece(name: viewModel.pieces[row][column].name, side: side, row: row, column: column)
-        self.onButtonTap = onButtonTap
     }
     
     var body: some View {
         let imgName = convertPieceNametoImg(name: piece.name)
         if (imgName != "") {
             ZStack {
-                Image(imgName) // Replace with your chess piece image
+                Image(imgName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: dragOffset.width == 0 ? cellWidth : cellWidth * 1.5, height: dragOffset.height == 0 ? cellHeight : cellHeight * 1.5)
@@ -44,7 +43,8 @@ struct PieceView: View {
                             }
                     )
                     .onTapGesture {
-                        self.onButtonTap(piece)
+                        let index = ChessboardHelper.indexForButton(piece: viewModel.pieces[piece.row][piece.column])
+                        moveTexts.texts.append("\(piece.name)\(ChessboardHelper.columnLetter(from: index.column))\(index.row + 1)")
                     }
             }
         }
@@ -61,6 +61,8 @@ struct PieceView: View {
         // Check if the move is valid and within bounds
         if isValidMove(toRow: newRow, toColumn: newColumn) {
             viewModel.movePiece(fromRow: piece.row, fromColumn: piece.column, toRow: newRow, toColumn: newColumn)
+            let toIndex = ChessboardHelper.indexForButton(piece: viewModel.pieces[newRow][newColumn])
+            moveTexts.texts.append("\(piece.name)\(ChessboardHelper.columnLetter(from: toIndex.column))\(toIndex.row + 1)")
         }
     }
     

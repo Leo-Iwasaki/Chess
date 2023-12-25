@@ -26,7 +26,7 @@ struct ChessboardView: View {
                 
             ForEach(0..<8, id: \.self) { row in
                 ForEach(0..<8, id: \.self) { column in
-                    PieceView(side: .white, row: row, column: column, viewModel: viewModel)
+                    PieceView(row: row, column: column, viewModel: viewModel)
                         .environmentObject(scrollViewTexts)
                 }
             }

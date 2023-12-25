@@ -12,16 +12,16 @@ struct PieceView: View {
     @ObservedObject var viewModel: ChessboardViewModel
     @State private var position: CGPoint
     @EnvironmentObject var moveTexts: MoveText
-
+    
     var piece: ChessPiece
     let cellWidth = (screenWidth * 0.78) / CGFloat(columns)
-    let cellHeight = (screenWidth * 0.75) / CGFloat(columns)
+    let cellHeight = (screenWidth * 0.735) / CGFloat(columns)
     
-    init(side: ChessSide, row: Int, column: Int, viewModel: ChessboardViewModel) {
+    init(row: Int, column: Int, viewModel: ChessboardViewModel) {
         let initialPosition = ChessboardHelper.positionForRowAndColumn(row: row, column: column, cellWidth: cellWidth, cellHeight: cellHeight)
         self._position = State(initialValue: initialPosition)
         self.viewModel = viewModel
-        self.piece = ChessPiece(name: viewModel.pieces[row][column].name, side: side, row: row, column: column)
+        self.piece = ChessPiece(name: viewModel.pieces[row][column].name, side: viewModel.pieces[row][column].side, row: row, column: column)
     }
     
     var body: some View {
@@ -34,19 +34,28 @@ struct PieceView: View {
                     .frame(width: dragOffset.width == 0 ? cellWidth : cellWidth * 1.5, height: dragOffset.height == 0 ? cellHeight : cellHeight * 1.5)
                     .position(x: position.x + dragOffset.width, y: position.y + dragOffset.height) // Update position during drag
                     .gesture(
-                        DragGesture()
+                        piece.side == playerSide ? DragGesture()
                             .updating($dragOffset, body: { (value, state, transaction) in
                                 state = value.translation
                             })
                             .onEnded { value in
                                 handleDragEnd(value: value)
-                            }
+                            } : nil
                     )
                     .onTapGesture {
-                        let index = ChessboardHelper.indexForButton(piece: viewModel.pieces[piece.row][piece.column])
-                        moveTexts.texts.append("\(piece.name)\(ChessboardHelper.columnLetter(from: index.column))\(index.row + 1)")
+                        handleTap()
                     }
+                
             }
+        }
+    }
+    
+    private func handleTap() {
+        if piece.side == playerSide {
+            viewModel.selectPiece(piece)
+        } else if piece.side == .none, let selectedPiece = viewModel.selectedPiece {
+            viewModel.moveSelectedPiece(toRow: piece.row, toColumn: piece.column)
+            moveTexts.texts.append("\(selectedPiece.name)\(ChessboardHelper.getChessPosExp(piece: selectedPiece))")
         }
     }
     
@@ -87,7 +96,7 @@ struct PieceView: View {
         case "r":
             return sideStr+"rook"
         default:
-            return ""
+            return "none"
         }
     }
 }

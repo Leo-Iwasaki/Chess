@@ -25,6 +25,22 @@ struct ChessboardHelper {
             return (row: 7 - piece.column, column: piece.row)
         case .black:
             return (row: 7 - piece.column, column: piece.row)
+        case .none:
+            return (-1, -1)
         }
+    }
+    
+    static func getChessPosExp(piece: ChessPiece) -> String {
+        let index = ChessboardHelper.indexForButton(piece: piece)
+        return "\(ChessboardHelper.columnLetter(from: index.column))\(index.row + 1)"
+    }
+    
+    static func opponentSide(side: ChessSide) -> ChessSide {
+        if (side == .white) {
+            return .black
+        } else if (side == .black) {
+            return .white
+        }
+        return .none
     }
 }

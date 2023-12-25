@@ -13,8 +13,9 @@ let rows = 8
 let columns = 8
 
 enum ChessSide {
-    case white, black
+    case white, black, none
 }
+var playerSide: ChessSide = .white
 
 struct ContentView: View {
     @StateObject var viewModel = ChessboardViewModel()
@@ -47,7 +48,7 @@ struct ContentView: View {
                 
                 Spacer()
                 
-                ChessboardView(side: .black, viewModel: viewModel)
+                ChessboardView(side: playerSide, viewModel: viewModel)
                     .environmentObject(scrollViewTexts)
                 
                 Spacer()

@@ -1,0 +1,15 @@
+NUM_PLAYERS = 2
+WHITE = True
+BLACK = False
+BOARD_WIDTH = 8
+BOARD_HEIGHT = 8
+
+PAWN = "p"
+KNIGHT = "n"
+BISHOP = "b"
+ROOK = "r"
+QUEEN = "q"
+KING = "k"
+
+BISHOP_LINE = 2
+ROOK_LINE = 1
